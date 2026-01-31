@@ -179,3 +179,17 @@ pyvenv.cfg
 pip-selfcheck.json
 
 # End of https://www.gitignore.io/api/macos,python,virtualenv,jupyternotebooks
+# AI Context Sync
+.vscode/AI_CONTEXT_SYNC.md
+
+# .traerules
+.traerules
+
+# .cursorrules
+.cursorrules
+
+# GitHub Copilot Instructions
+.github/copilot-instructions.md
+
+# PDF files
+*.pdf

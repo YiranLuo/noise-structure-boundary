@@ -5,7 +5,11 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from torch.autograd.gradcheck import zero_gradients
+
+# Replace the deprecated zero_gradients import with a custom implementation
+def zero_gradients(x):
+    if x.grad is not None:
+        x.grad.zero_()
 
 # Clipping function
 def clip(current, low_bound, up_bound):
