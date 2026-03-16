@@ -193,3 +193,5 @@ pip-selfcheck.json
 
 # PDF files
 *.pdf
+
+docs/
