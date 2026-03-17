@@ -245,44 +245,49 @@ def compute_noise_scores(X_np, backend, chunk_size, gpu_index, log_every, svd_ev
         "cpu/numpy",
     )
 
-args = parse_args()
+def main():
+    args = parse_args()
 
-# Fetch dataset
-spambase = fetch_ucirepo(id=94)
+    # Fetch dataset
+    spambase = fetch_ucirepo(id=94)
 
-# data (as pandas dataframes)
-X = spambase.data.features
-y = spambase.data.targets
+    # data (as pandas dataframes)
+    X = spambase.data.features
+    y = spambase.data.targets
 
-# metadata
-print("Dataset Metadata:")
-print(spambase.metadata)
-print("\n")
+    # metadata
+    print("Dataset Metadata:")
+    print(spambase.metadata)
+    print("\n")
 
-print(f"Total number of instances (rows) in features (X): {X.shape[0]}")
-print(f"Total number of instances (rows) in target (y): {y.shape[0]}")
+    print(f"Total number of instances (rows) in features (X): {X.shape[0]}")
+    print(f"Total number of instances (rows) in target (y): {y.shape[0]}")
 
-X_total_np = X.values.astype(np.float32)
-num_instances = X_total_np.shape[0]
+    X_total_np = X.values.astype(np.float32)
+    num_instances = X_total_np.shape[0]
 
-print("\nStarting iterative SVD noise scoring...")
-(noise_scores, index_removed_at_step, singular_values_shape), backend_name = compute_noise_scores(
-    X_total_np,
-    backend=args.backend,
-    chunk_size=max(1, args.chunk_size),
-    gpu_index=args.gpu_index,
-    log_every=max(1, args.log_every),
-    svd_every=max(1, args.svd_every),
-)
+    print("\nStarting iterative SVD noise scoring...")
+    (noise_scores, index_removed_at_step, singular_values_shape), backend_name = compute_noise_scores(
+        X_total_np,
+        backend=args.backend,
+        chunk_size=max(1, args.chunk_size),
+        gpu_index=args.gpu_index,
+        log_every=max(1, args.log_every),
+        svd_every=max(1, args.svd_every),
+    )
 
-print(f"Backend: {backend_name}")
-print(f"Initial singular values shape: {singular_values_shape}")
-print("Iterative SVD noise scoring complete.")
+    print(f"Backend: {backend_name}")
+    print(f"Initial singular values shape: {singular_values_shape}")
+    print("Iterative SVD noise scoring complete.")
 
-topk = max(1, min(args.topk, num_instances))
-top_step_indices = np.arange(topk)
+    topk = max(1, min(args.topk, num_instances))
+    top_step_indices = np.arange(topk)
 
-print(f"\nFirst {topk} removed instances (MATLAB-style ordered influence):")
-for step_idx in top_step_indices:
-    original_idx = index_removed_at_step[step_idx]
-    print(f"Original Index: {original_idx}, Noise Score: {noise_scores[step_idx]:.6f}")
+    print(f"\nFirst {topk} removed instances (MATLAB-style ordered influence):")
+    for step_idx in top_step_indices:
+        original_idx = index_removed_at_step[step_idx]
+        print(f"Original Index: {original_idx}, Noise Score: {noise_scores[step_idx]:.6f}")
+
+
+if __name__ == "__main__":
+    main()
