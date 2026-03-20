@@ -195,3 +195,5 @@ pip-selfcheck.json
 *.pdf
 
 docs/
+
+experiments/stronger_classifier.ipynb
