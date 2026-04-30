@@ -1,0 +1,43 @@
+{
+  "config": {
+    "alpha": 0.1,
+    "maxiters": 300,
+    "lambdas": {
+      "aggressive": 0.1,
+      "stealthy": 50.0
+    },
+    "attack_pcts": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100
+    ],
+    "k_ranks": [
+      1,
+      2,
+      3,
+      5,
+      10,
+      15,
+      20,
+      30,
+      40,
+      50,
+      57
+    ],
+    "n_test": 2301,
+    "n_correct": 2058,
+    "data_dir": "spambase_10_40_50",
+    "data_split": "10/40/50 (SVD/train/test); test set unchanged vs legacy 50/50"
+  },
+  "attack_success": {
+    "aggressive": 2058,
+    "stealthy": 1519
+  }
+}
