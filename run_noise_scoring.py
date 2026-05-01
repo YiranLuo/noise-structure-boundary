@@ -327,7 +327,7 @@ for name, X_scenario in scenario_inputs.items():
 # ============================================================================
 # SAVE RESULTS WITH TIMESTAMPS
 # ============================================================================
-output_dir = Path("experiments/noise_scoring_outputs") / TIMESTAMP
+output_dir = Path("experiments/outputs/noise_scoring") / TIMESTAMP
 output_dir.mkdir(parents=True, exist_ok=True)
 log(f"\nSaving results to: {output_dir}")
 

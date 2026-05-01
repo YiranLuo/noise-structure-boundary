@@ -66,9 +66,9 @@
   "n_svd": 460,
   "n_train": 1840,
   "n_test": 2301,
-  "scaler": "MinMaxScaler [0, 1] (inherited from spambase_50_50)",
-  "derived_from": "spambase_50_50/train_test_data.npz",
+  "scaler": "MinMaxScaler [0, 1] (inherited from experiments/data/spambase_50_50)",
+  "derived_from": "experiments/data/spambase_50_50/train_test_data.npz",
   "inner_split": "80/20 of existing X_train, stratified by y_train",
   "test_set_unchanged": true,
-  "noise_scores_still_valid_at": "experiments/noise_scoring_outputs/20260324_203954/"
+  "noise_scores_still_valid_at": "experiments/outputs/noise_scoring/20260324_203954/"
 }

@@ -37,7 +37,7 @@ if torch.cuda.is_available():
 
 CHUNK_SIZE = 256
 TOPK = 20
-DATA_FILE = Path("spambase_50_50") / "train_test_data.npz"
+DATA_FILE = Path("experiments/data/spambase_50_50") / "train_test_data.npz"
 
 
 def _load_test_set(npz_path: Path):
@@ -200,7 +200,7 @@ svd_results = {
 # ============================================================================
 # SAVE RESULTS WITH TIMESTAMPS
 # ============================================================================
-output_dir = Path("experiments/noise_scoring_outputs") / TIMESTAMP
+output_dir = Path("experiments/outputs/noise_scoring") / TIMESTAMP
 output_dir.mkdir(parents=True, exist_ok=True)
 log(f"\nSaving results to: {output_dir}")
 
