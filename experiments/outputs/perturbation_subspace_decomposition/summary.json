@@ -1,0 +1,62 @@
+{
+  "experiment": "Per-Perturbation Subspace Decomposition (H9, Experiment 12.1)",
+  "config": {
+    "data_dir": "../../data/spambase_10_40_50",
+    "svd_basis_source": "10% partition Vt_svd (clean_svd_basis.npz, 10/40/50 split, Entry 13)",
+    "adv_samples_from": "../../outputs/targeted_vaccination_10_40_50",
+    "tier_percentile": 20,
+    "k_ranks": [
+      1,
+      2,
+      3,
+      5,
+      10,
+      15,
+      20,
+      30,
+      40,
+      50,
+      57
+    ],
+    "lambdas": {
+      "aggressive": 0.1,
+      "stealthy": 50.0
+    },
+    "eps_norm": 1e-10
+  },
+  "sample_sizes": {
+    "aggressive": 2058,
+    "stealthy": 1519
+  },
+  "mean_alpha_at_k10_by_tier": {
+    "Score 1": {
+      "aggressive": {
+        "structural": 0.511127233505249,
+        "noisy": 0.4364423453807831
+      },
+      "stealthy": {
+        "structural": 0.8199796080589294,
+        "noisy": 0.7491739988327026
+      }
+    },
+    "Score 2": {
+      "aggressive": {
+        "structural": 0.4749964773654938,
+        "noisy": 0.4304713010787964
+      },
+      "stealthy": {
+        "structural": 0.7860949039459229,
+        "noisy": 0.7457350492477417
+      }
+    }
+  },
+  "outputs": [
+    "mean_cumulative_energy.csv",
+    "mean_cumulative_energy_score1.png",
+    "mean_cumulative_energy_score2.png",
+    "per_direction_energy.csv",
+    "per_direction_energy_score1.png",
+    "per_direction_energy_score2.png",
+    "summary.json"
+  ]
+}

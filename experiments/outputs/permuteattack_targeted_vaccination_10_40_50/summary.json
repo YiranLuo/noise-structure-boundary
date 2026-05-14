@@ -1,0 +1,50 @@
+{
+  "attack": "PermuteAttack (naive variant, Hashemi & Fathi 2020, arXiv:2008.10138)",
+  "source_code": "/data/home/yluo147/projects/LowProFool/PermuteAttack-main",
+  "config": {
+    "permute_regimes": {
+      "default": {
+        "sol_per_pop": 30,
+        "num_parents_mating": 10,
+        "num_generations": 100,
+        "n_runs": 10,
+        "beta": 0.95
+      }
+    },
+    "attack_pcts": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100
+    ],
+    "k_ranks": [
+      1,
+      2,
+      3,
+      5,
+      10,
+      15,
+      20,
+      30,
+      40,
+      50,
+      57
+    ],
+    "n_test": 2301,
+    "n_correct": 2058,
+    "n_attacked_samples": 2058,
+    "max_samples_cap": null,
+    "data_dir": "../../data/spambase_10_40_50",
+    "data_split": "10/40/50 (SVD/train/test); test set unchanged vs legacy 50/50",
+    "permute_train_marginal_source": "40% training partition (X_train, n=1840)"
+  },
+  "attack_success": {
+    "default": 2019
+  }
+}
