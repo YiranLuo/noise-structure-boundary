@@ -1,5 +1,23 @@
 #!/usr/bin/env python3
+"""Compute Score 1 (greedy SV perturbation) and Score 2 (latent-coordinate
+abruptness) on a dataset's clean test set.
 
+By default this targets the Spambase 50/50 split for backward compatibility
+with Entry 5 of `docs/experiment_log.md`. Use the CLI flags to target other
+datasets (e.g. the Taiwanese Bankruptcy 10/40/50 split).
+
+Examples
+--------
+Spambase (legacy default):
+    python run_noise_scoring_for_test_set_clean_data.py
+
+Taiwanese Bankruptcy 10/40/50:
+    python run_noise_scoring_for_test_set_clean_data.py \
+        --data-file experiments/data/taiwan_bankruptcy_10_40_50/train_test_data.npz \
+        --output-tag taiwan_bankruptcy_10_40_50
+"""
+
+import argparse
 import numpy as np
 import pandas as pd
 import torch
@@ -7,6 +25,46 @@ import time
 import json
 from pathlib import Path
 from datetime import datetime
+
+# ============================================================================
+# CLI ARGUMENTS
+# ============================================================================
+parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+parser.add_argument(
+    "--data-file",
+    type=Path,
+    default=Path("experiments/data/spambase_50_50/train_test_data.npz"),
+    help="Path to the .npz file containing the test set (default: Spambase 50/50).",
+)
+parser.add_argument(
+    "--output-tag",
+    type=str,
+    default=None,
+    help=(
+        "Optional dataset subdirectory under experiments/outputs/noise_scoring/. "
+        "If omitted, outputs go directly under experiments/outputs/noise_scoring/<timestamp>/ "
+        "(legacy Spambase layout)."
+    ),
+)
+parser.add_argument(
+    "--scenario-name",
+    type=str,
+    default="test_clean_data",
+    help="Filename prefix used for the per-scenario CSV/NPY outputs.",
+)
+parser.add_argument(
+    "--chunk-size",
+    type=int,
+    default=256,
+    help="Greedy-removal batch size for Score 1 (default: 256).",
+)
+parser.add_argument(
+    "--topk",
+    type=int,
+    default=20,
+    help="Number of top-ranked points to print in the summary log (default: 20).",
+)
+args = parser.parse_args()
 
 # ============================================================================
 # LOGGING SETUP WITH TIMESTAMPS
@@ -26,6 +84,9 @@ def log(msg):
 
 log(f"=== Noise Scoring Pipeline Started (Session: {TIMESTAMP}) ===")
 log(f"Logs: {LOG_FILE}")
+log(f"Data file: {args.data_file}")
+log(f"Output tag: {args.output_tag if args.output_tag else '(none — legacy Spambase layout)'}")
+log(f"Scenario name: {args.scenario_name}")
 
 # ============================================================================
 # DEVICE & HYPERPARAMETERS
@@ -35,9 +96,9 @@ log(f"Device: {DEVICE}")
 if torch.cuda.is_available():
     log(f"GPU: {torch.cuda.get_device_name(0)}")
 
-CHUNK_SIZE = 256
-TOPK = 20
-DATA_FILE = Path("experiments/data/spambase_50_50") / "train_test_data.npz"
+CHUNK_SIZE = args.chunk_size
+TOPK = args.topk
+DATA_FILE = args.data_file
 
 
 def _load_test_set(npz_path: Path):
@@ -159,7 +220,7 @@ def compute_iterative_scores_torch(X_np, chunk_size=256, device=None, log_every=
 X_test_raw, y_test, npz_keys, test_x_key, test_y_key = _load_test_set(DATA_FILE)
 X_test = _to_2d_float32(X_test_raw)
 
-name = 'test_clean_data'
+name = args.scenario_name
 log(f"\n[{name}] Starting noise scoring | shape={X_test.shape}")
 noise_scores_1, index_removed_s1, noise_scores_2, singular_values_shape = compute_iterative_scores_torch(
     X_test, chunk_size=CHUNK_SIZE, device=DEVICE, log_every=50
@@ -200,7 +261,11 @@ svd_results = {
 # ============================================================================
 # SAVE RESULTS WITH TIMESTAMPS
 # ============================================================================
-output_dir = Path("experiments/outputs/noise_scoring") / TIMESTAMP
+output_root = Path("experiments/outputs/noise_scoring")
+if args.output_tag:
+    output_dir = output_root / args.output_tag / TIMESTAMP
+else:
+    output_dir = output_root / TIMESTAMP
 output_dir.mkdir(parents=True, exist_ok=True)
 log(f"\nSaving results to: {output_dir}")
 
