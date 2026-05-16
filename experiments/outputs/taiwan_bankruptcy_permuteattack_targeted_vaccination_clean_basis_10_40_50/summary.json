@@ -1,0 +1,50 @@
+{
+  "attack": "PermuteAttack (naive variant, Hashemi & Fathi 2020, arXiv:2008.10138)",
+  "config": {
+    "permute_regimes": {
+      "default": {
+        "sol_per_pop": 30,
+        "num_parents_mating": 10,
+        "num_generations": 100,
+        "n_runs": 10,
+        "beta": 0.95
+      }
+    },
+    "attack_pcts": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100
+    ],
+    "k_ranks": [
+      1,
+      2,
+      3,
+      5,
+      10,
+      15,
+      20,
+      30,
+      40,
+      50,
+      70,
+      94
+    ],
+    "n_train_mlp": 2727,
+    "n_svd_basis_rows": 682,
+    "n_test": 3410,
+    "n_correct": 2998,
+    "svd_basis": "10% partition Vt_svd (clean_svd_basis.npz)",
+    "data_dir": "../../data/taiwan_bankruptcy_10_40_50",
+    "adv_samples_from": "../../outputs/taiwan_bankruptcy_permuteattack_targeted_vaccination_10_40_50"
+  },
+  "attack_success": {
+    "default": 2595
+  }
+}
